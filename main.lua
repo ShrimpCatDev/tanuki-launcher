@@ -17,6 +17,7 @@ end
 function love.load()
 
     theme=require("themes")
+    currentTheme=theme.dark
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -39,36 +40,40 @@ function love.load()
     love.window.setMode(800,600,{resizable=true})
     font=lg.newFont("assets/font/contb.ttf",32)
     lg.setFont(font)
-    --bg=lg.newImage("assets/bg/test.png")
+
     fade=lg.newShader("shaders/fade.glsl")
 
     local w,h=love.window.getMode( )
-    bg=lg.newCanvas(w,h)
+    bg={img=lg.newCanvas(w,h),spd=8}
+    timer.tween(1,bg,{spd=0.5},"out-cubic")
 end
 
 function love.update(dt)
     timer.update(dt)
     input:update()
-    fade:send("time",love.timer.getTime())
+    fade:send("time",love.timer.getTime()*bg.spd)
 end
 
 function love.draw()
-    lg.clear(color(theme.light.bg2))
+    lg.clear(color(currentTheme.bg2))
     
-    lg.setCanvas(bg)
-        lg.setColor(color(theme.light.bg1))
-        lg.rectangle("fill",0,0,bg:getWidth(),bg:getHeight())
+    lg.setCanvas(bg.img)
+        lg.setColor(color(currentTheme.bg1))
+        lg.rectangle("fill",0,0,bg.img:getWidth(),bg.img:getHeight())
     lg.setCanvas()
 
+    lg.push()
     lg.setShader(fade)
-        cImg(bg)
+        cImg(bg.img)
     lg.setShader()
+    lg.pop()
+
+    lg.setColor(1,1,1,1)
+
     drawElement(16,16,1,function()
         local txt=os.date("%H:%M")
         lg.setColor(color("#ffffff"))
-        lg.setShader(fade)
         lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,16,16)
-        lg.setShader()
         lg.setColor(color("#292b31ff"))
         lg.print(txt,2,2)
     end)
@@ -76,5 +81,15 @@ function love.draw()
 end
 
 function love.resize(w,h)
-    bg=lg.newCanvas(w,h)
+    bg.img=lg.newCanvas(w,h)
+end
+
+function love.keypressed(k)
+    if k=="f11" then
+        if love.window.getFullscreen() then
+            love.window.setFullscreen(false)
+        else
+            love.window.setFullscreen(true)
+        end
+    end
 end
