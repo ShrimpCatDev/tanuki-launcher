@@ -14,10 +14,16 @@ function cImg(img)
     lg.draw(img,w/2,h/2,0,1,1,img:getWidth()/2,img:getHeight()/2)
 end
 
+function scaled(img,ts)
+    local iw,ih=img:getDimensions()
+    local scale=ts/math.max(iw,ih)
+    return scale
+end
+
 function love.load()
 
     theme=require("themes")
-    currentTheme=theme.dark
+    currentTheme=theme.light
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -60,6 +66,10 @@ function love.load()
     target={w=1280,h=800}
     local w,h=love.window.getMode( )
     scale=math.min(w/target.w,h/target.h)
+
+    music=love.audio.newSource("assets/music.wav","stream")
+    music:setLooping(true)
+    music:play()
 end
 
 function love.update(dt)
@@ -110,11 +120,14 @@ function love.draw()
     lg.rectangle("fill",64,128,w-128,h-256,16,16)
 
     lg.setColor(1,1,1,1)
-    div=w/icon:getWidth()*0.1
+    local s=scaled(icon,128)
+    print(icon:getWidth()*s)
+    lg.draw(icon,64,64,0,s,s)
 
 
     lg.setColor(color(currentTheme.text))
     lg.print(items[1].name,64+16,128+16)
+
     
 end
 
