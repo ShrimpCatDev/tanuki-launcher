@@ -17,7 +17,8 @@ end
 function love.load()
 
     theme=require("themes")
-
+    
+    timer=require("lib/timer")
     color=require("lib/hex2color")
     local baton=require("lib/baton")
     input = baton.new ({
@@ -46,6 +47,7 @@ function love.load()
 end
 
 function love.update(dt)
+    timer.update(dt)
     input:update()
     fade:send("time",love.timer.getTime())
 end
