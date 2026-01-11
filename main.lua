@@ -17,7 +17,7 @@ end
 function love.load()
 
     theme=require("themes")
-    currentTheme=theme.dark
+    currentTheme=theme.light
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -37,7 +37,7 @@ function love.load()
     })
 
     --os.execute("flatpak run org.libretro.RetroArch")
-    love.window.setMode(800,600,{resizable=true})
+    love.window.setMode(1280,800,{resizable=true})
     font=lg.newFont("assets/font/contb.ttf",32)
     lg.setFont(font)
 
@@ -46,6 +46,15 @@ function love.load()
     local w,h=love.window.getMode( )
     bg={img=lg.newCanvas(w,h),spd=8,img2=lg.newCanvas(w,h)}
     timer.tween(1,bg,{spd=0.5},"out-cubic")
+
+    icon=lg.newImage("assets/icons/retroarch.png")
+
+    items={
+        {
+            name="Retroarch",
+            launch="flatpak run org.libretro.RetroArch"
+        }
+    }
 end
 
 function love.update(dt)
@@ -53,11 +62,12 @@ function love.update(dt)
     input:update()
     fade:send("time",love.timer.getTime()*bg.spd)
 
-    --[[if input:pressed("action") then
-        print("lauch")
-        os.execute("flatpak run org.libretro.RetroArch")
-    end]]
+    if input:pressed("action") then
+        print("launching "..items[1].name)
+        os.execute(items[1].launch)
+    end
 end
+-- ...existing code...
 
 function love.draw()
     local w,h=love.window.getMode( )
@@ -77,7 +87,7 @@ function love.draw()
 
     lg.setColor(1,1,1,1)
 
-    drawElement(16,16,1,function()
+    drawElement(34,32,1,function()
         local txt=os.date("%H:%M")
         lg.setColor(color(currentTheme.ui))
         lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,16,16)
@@ -87,7 +97,18 @@ function love.draw()
 
     
     lg.setColor(color(currentTheme.ui))
+
+    local c=color(currentTheme.ui)
+    
+    lg.setColor(c[1],c[2],c[3],0.4)
+
     lg.rectangle("fill",64,128,w-128,h-256,16,16)
+
+    lg.setColor(1,1,1,1)
+    --lg.draw(icon,64+16,128+16,0,1,1)
+
+    lg.setColor(color(currentTheme.text))
+    lg.print(items[1].name,64+16,128+16)
     
 end
 

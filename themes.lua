@@ -10,5 +10,17 @@ return {
         bg2="#051630ff",
         ui="#051630ad",
         text="#e6ecffff"
-    }
+    },
+    lime={
+        bg1="#95ec30ff",
+        bg2="#b1f397ff",
+        ui="#d0f1db17",
+        text="#292b31ff"
+    },
+    psp={
+        bg2="#091d5eff",
+        bg1="#57f4ffff",
+        ui="#b8dfebff",
+        text="#292b31ff"
+    },
 }
