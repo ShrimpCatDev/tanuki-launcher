@@ -1,3 +1,14 @@
+lg=love.graphics
+
+function drawElement(x,y,w,func)
+    lg.push()
+        lg.translate(x,y)
+        lg.scale(w,w)
+            func()
+        lg.translate(0,0)
+    lg.pop()
+end
+
 function love.load()
     color=require("lib/hex2color")
     local baton=require("lib/baton")
@@ -17,7 +28,9 @@ function love.load()
 
     --os.execute("flatpak run org.libretro.RetroArch")
     love.window.setMode(800,600,{resizable=true})
-    font=love.graphics.newFont("assets/font/contb.ttf")
+    font=lg.newFont("assets/font/contb.ttf",32)
+    lg.setFont(font)
+    bg=lg.newImage("assets/bg/test.png")
 end
 
 function love.update(dt)
@@ -25,11 +38,17 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.clear(color("#f5f5f5"))
-    love.graphics.setColor(color("#bebebeff"))
-    love.graphics.rectangle("fill",0,0,64,16,4,4)
-    love.graphics.setColor(color("#292b31ff"))
-    love.graphics.print(os.date("%H:%M"))
+    lg.clear(color("#f5f5f5"))
+    lg.setColor(1,1,1,1)
+    lg.draw(bg)
+    drawElement(16,16,1,function()
+        local txt=os.date("%H:%M")
+        lg.setColor(color("#bebebeff"))
+        lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,8,8)
+        lg.setColor(color("#292b31ff"))
+        lg.print(txt,2,2)
+    end)
+    
 end
 
 function love.resize(w,h)
