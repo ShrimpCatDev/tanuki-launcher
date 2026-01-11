@@ -44,7 +44,7 @@ function love.load()
     fade=lg.newShader("shaders/fade.glsl")
 
     local w,h=love.window.getMode( )
-    bg={img=lg.newCanvas(w,h),spd=8}
+    bg={img=lg.newCanvas(w,h),spd=8,img2=lg.newCanvas(w,h)}
     timer.tween(1,bg,{spd=0.5},"out-cubic")
 end
 
@@ -52,9 +52,16 @@ function love.update(dt)
     timer.update(dt)
     input:update()
     fade:send("time",love.timer.getTime()*bg.spd)
+
+    --[[if input:pressed("action") then
+        print("lauch")
+        os.execute("flatpak run org.libretro.RetroArch")
+    end]]
 end
 
 function love.draw()
+    local w,h=love.window.getMode( )
+
     lg.clear(color(currentTheme.bg2))
     
     lg.setCanvas(bg.img)
@@ -72,11 +79,15 @@ function love.draw()
 
     drawElement(16,16,1,function()
         local txt=os.date("%H:%M")
-        lg.setColor(color("#ffffff"))
+        lg.setColor(color(currentTheme.ui))
         lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,16,16)
-        lg.setColor(color("#292b31ff"))
-        lg.print(txt,2,2)
+        lg.setColor(color(currentTheme.text))
+        lg.print(txt,16,2)
     end)
+
+    
+    lg.setColor(color(currentTheme.ui))
+    lg.rectangle("fill",64,128,w-128,h-256,16,16)
     
 end
 
