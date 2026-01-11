@@ -17,7 +17,7 @@ end
 function love.load()
 
     theme=require("themes")
-    currentTheme=theme.light
+    currentTheme=theme.dark
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -48,6 +48,7 @@ function love.load()
     timer.tween(1,bg,{spd=0.5},"out-cubic")
 
     icon=lg.newImage("assets/icons/retroarch.png")
+    icon2=lg.newImage("assets/icons/retroarch2.png")
 
     items={
         {
@@ -55,6 +56,10 @@ function love.load()
             launch="flatpak run org.libretro.RetroArch"
         }
     }
+
+    target={w=1280,h=800}
+    local w,h=love.window.getMode( )
+    scale=math.min(w/target.w,h/target.h)
 end
 
 function love.update(dt)
@@ -105,7 +110,8 @@ function love.draw()
     lg.rectangle("fill",64,128,w-128,h-256,16,16)
 
     lg.setColor(1,1,1,1)
-    --lg.draw(icon,64+16,128+16,0,1,1)
+    div=w/icon:getWidth()*0.1
+
 
     lg.setColor(color(currentTheme.text))
     lg.print(items[1].name,64+16,128+16)
@@ -114,6 +120,8 @@ end
 
 function love.resize(w,h)
     bg.img=lg.newCanvas(w,h)
+    local w,h=love.window.getMode( )
+    scale=math.min(w/target.w,h/target.h)
 end
 
 function love.keypressed(k)
