@@ -9,6 +9,11 @@ function drawElement(x,y,w,func)
     lg.pop()
 end
 
+function cImg(img)
+    local w,h=love.window.getMode( )
+    lg.draw(img,w/2,h/2,0,1,1,img:getWidth()/2,img:getHeight()/2)
+end
+
 function love.load()
     color=require("lib/hex2color")
     local baton=require("lib/baton")
@@ -40,7 +45,7 @@ end
 function love.draw()
     lg.clear(color("#f5f5f5"))
     lg.setColor(1,1,1,1)
-    lg.draw(bg)
+    cImg(bg)
     drawElement(16,16,1,function()
         local txt=os.date("%H:%M")
         lg.setColor(color("#bebebeff"))
