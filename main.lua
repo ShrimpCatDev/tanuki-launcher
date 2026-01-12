@@ -1,24 +1,4 @@
-lg=love.graphics
-
-function drawElement(x,y,w,func)
-    lg.push()
-        lg.translate(x,y)
-        lg.scale(w,w)
-            func()
-        lg.translate(0,0)
-    lg.pop()
-end
-
-function cImg(img)
-    local w,h=love.window.getMode( )
-    lg.draw(img,w/2,h/2,0,1,1,img:getWidth()/2,img:getHeight()/2)
-end
-
-function scaled(img,ts)
-    local iw,ih=img:getDimensions()
-    local scale=ts/math.max(iw,ih)
-    return scale
-end
+require("init")
 
 function love.load()
 
@@ -69,7 +49,7 @@ function love.load()
 
     music=love.audio.newSource("assets/music.wav","stream")
     music:setLooping(true)
-    music:play()
+    --music:play()
 end
 
 function love.update(dt)
@@ -82,7 +62,8 @@ function love.update(dt)
         os.execute(items[1].launch)
     end
 end
--- ...existing code...
+
+profile=lg.newImage("assets/profile.png")
 
 function love.draw()
     local w,h=love.window.getMode( )
@@ -108,6 +89,9 @@ function love.draw()
         lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,16,16)
         lg.setColor(color(currentTheme.text))
         lg.print(txt,16,2)
+        lg.setColor(1,1,1,1)
+        local s=scaled(profile,52)
+        lg.draw(profile,font:getWidth(txt)+28,-8,0,s,s)
     end)
 
     
@@ -122,7 +106,7 @@ function love.draw()
     lg.setColor(1,1,1,1)
     local s=scaled(icon,128)
     print(icon:getWidth()*s)
-    lg.draw(icon,64,64,0,s,s)
+    --lg.draw(icon,64,64,0,s,s)
 
 
     lg.setColor(color(currentTheme.text))
