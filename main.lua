@@ -3,7 +3,7 @@ require("init")
 function love.load()
 
     theme=require("themes")
-    currentTheme=theme.light
+    currentTheme=theme.peach
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -50,6 +50,9 @@ function love.load()
     music=love.audio.newSource("assets/music.wav","stream")
     music:setLooping(true)
     --music:play()
+
+    profile=require("widgets/profile")
+    profile:init()
 end
 
 function love.update(dt)
@@ -61,9 +64,9 @@ function love.update(dt)
         print("launching "..items[1].name)
         os.execute(items[1].launch)
     end
-end
 
-profile=lg.newImage("assets/profile.png")
+    profile:update(dt)
+end
 
 function love.draw()
     local w,h=love.window.getMode( )
@@ -83,17 +86,7 @@ function love.draw()
 
     lg.setColor(1,1,1,1)
 
-    drawElement(34,32,1,function()
-        local txt=os.date("%H:%M")
-        lg.setColor(color(currentTheme.ui))
-        lg.rectangle("fill",0,0,font:getWidth(txt)+32,font:getHeight()+4,16,16)
-        lg.setColor(color(currentTheme.text))
-        lg.print(txt,16,2)
-        lg.setColor(1,1,1,1)
-        local s=scaled(profile,52)
-        lg.draw(profile,font:getWidth(txt)+28,-8,0,s,s)
-    end)
-
+    profile:draw(w,h)
     
     lg.setColor(color(currentTheme.ui))
 
@@ -111,8 +104,6 @@ function love.draw()
 
     lg.setColor(color(currentTheme.text))
     lg.print(items[1].name,64+16,128+16)
-
-    
 end
 
 function love.resize(w,h)

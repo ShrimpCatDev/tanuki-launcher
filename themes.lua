@@ -23,4 +23,10 @@ return {
         ui="#b8dfebff",
         text="#292b31ff"
     },
+    peach={
+        bg1="#f57f50ff",
+        bg2="#d0e7f1ff",
+        ui="#f1d9d0ff",
+        text="#292b31ff"
+    },
 }
