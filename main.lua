@@ -53,6 +53,9 @@ function love.load()
 
     profile=require("widgets/profile")
     profile:init()
+
+    gs=require("widgets/gameSelect")
+    gs:init()
 end
 
 function love.update(dt)
@@ -66,6 +69,7 @@ function love.update(dt)
     end
 
     profile:update(dt)
+    gs:update(dt)
 end
 
 function love.draw()
@@ -79,31 +83,18 @@ function love.draw()
     lg.setCanvas()
 
     lg.push()
-    lg.setShader(fade)
-        cImg(bg.img)
-    lg.setShader()
+        lg.setShader(fade)
+            cImg(bg.img)
+        lg.setShader()
     lg.pop()
 
     lg.setColor(1,1,1,1)
-
     profile:draw(w,h)
-    
-    lg.setColor(color(currentTheme.ui))
 
-    local c=color(currentTheme.ui)
-    
-    lg.setColor(c[1],c[2],c[3],0.4)
-
-    lg.rectangle("fill",64,128,w-128,h-256,16,16)
+    gs:draw(w,h)
 
     lg.setColor(1,1,1,1)
     local s=scaled(icon,128)
-    print(icon:getWidth()*s)
-    --lg.draw(icon,64,64,0,s,s)
-
-
-    lg.setColor(color(currentTheme.text))
-    lg.print(items[1].name,64+16,128+16)
 end
 
 function love.resize(w,h)
