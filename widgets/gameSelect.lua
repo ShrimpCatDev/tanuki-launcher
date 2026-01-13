@@ -25,28 +25,42 @@ function gs:draw(w,h)
     end
     lg.push()
     lg.translate(64,128)
+
+        local nx=10
+        local ny=5
+
         local c=color(currentTheme.ui)
         lg.setColor(c[1],c[2],c[3],0.4)
 
-        lg.rectangle("fill",0,0,w-128,h-256,16,16)
+        local cy=((h/128-3)/128)*(h/128-3)
+
+        local sx=((w-128)/10)/2
+        local sy=sx
+
+        lg.rectangle("fill",0,0,w-128,(((w-128)/10)*ny)+sy/2,16,16)
 
         lg.setColor(c)
-        for x=0,w/128-2 do
-            for y=0,h/128-3 do
-                lg.circle("fill",x*128+64,y*128+64,2)
+        
+        local c=color(currentTheme.hi)
+        lg.setColor(c)
+        for x=0,nx-1 do
+            for y=0,ny-1 do
+                
+                lg.circle("fill",x*((w-128)/nx)+sx,sy+(y*((w-128)/nx)),2)
+                --print((((h-256)/4)/2))
             end
         end
 
         lg.stencil(function()
-            lg.rectangle("fill",64,64,256,128,8,8)
+            lg.rectangle("fill",sx,sy,sx*4,sy*2,8,8)
         end,"replace",1)
         lg.setStencilTest("greater", 0)
             lg.setColor(1,1,1,1)
-            lg.draw(self.icons[1].canvas,64,64)
+            lg.draw(self.icons[1].canvas,sx,sy,0,scaled(self.icons[1].canvas,sx*4),scaled(self.icons[1].canvas,sy*4))
         lg.setStencilTest()
         lg.setColor(c)
         lg.setLineWidth(4)
-        lg.rectangle("line",64,64,256,128,8,8)
+        lg.rectangle("line",sx,sy,sx*4,sy*2,8,8)
         lg.setLineWidth(1)
     lg.translate(0,0)
     lg.pop()

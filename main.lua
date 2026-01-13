@@ -3,7 +3,7 @@ require("init")
 function love.load()
 
     theme=require("themes")
-    currentTheme=theme.peach
+    currentTheme=theme.dark
     
     timer=require("lib/timer")
     color=require("lib/hex2color")
@@ -39,7 +39,7 @@ function love.load()
     items={
         {
             name="Retroarch",
-            launch="flatpak run org.libretro.RetroArch"
+            launch=[[flatpak run info.cemu.Cemu -g "/run/media/deck/75d203dc-5e2a-48d2-965b-4e7e77ecdf50/Emulation/roms/wiiu/MARIO KART 8 [Game] [000500001010ec00]/code/Turbo.rpx"]]
         }
     }
 
@@ -73,7 +73,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    local w,h=love.window.getMode( )
+    local w,h,mew=love.window.getMode( )
 
     lg.clear(color(currentTheme.bg2))
     
